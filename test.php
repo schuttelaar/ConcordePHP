@@ -51,6 +51,10 @@ function fakeRequest($domain,$method,$url) {
 }
 
 fakeRequest('mywebsite.com','GET','/');
+
+
+
+
 Concordia::route(array(
 	'.*' => array(
 		'GET' => array(

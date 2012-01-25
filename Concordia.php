@@ -108,6 +108,12 @@ class Concordia {
 		//Found a match
 		if (!$flagFoundMatch) throw new Exception('No route has been found for URL: '.$url);
 		
+		//Starts with a /, then redirect
+		if (strpos($route,'/')===0) {
+			header('Location: '.$route);
+			exit();
+		}
+		
 		//Obtain call information
 		$callInfo = explode('->', $route);
 		if (count($callInfo)!==2) throw new Exception('Invalid Call information: '.$route);
