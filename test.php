@@ -259,3 +259,112 @@ Concordia::route(array(
 }
 
 asrt($m,'Unable to create instance of class: Bug');
+
+
+//can we scan array structure; i.e. see POST and GET as *. => POST so we can
+//have default domain without defining it beforehand?
+fakeRequest('mywebsite.com','GET','/');
+
+
+Concordia::route(array(
+	'GET'=>array(
+		'/'=>'Controller1->action1'
+	)
+));
+
+asrt(Data::$info,'action1');
+
+
+Concordia::route(array(
+	'GET'=>array(
+		'/'=>'Controller1->action1',
+		'/page'=>'Controller2->action3',
+	)
+));
+
+asrt(Data::$info,'action1');
+
+Concordia::route(array(
+	
+	'.*'=>array(
+	'GET'=>array(
+		'/'=>'Controller1->action1',
+		'/page'=>'Controller2->action3',
+	),
+	),
+	
+	'.*\.com'=>array(
+		'GET'=>array(
+			'/'=>'Controller2->action3'
+		)
+	),
+	
+	
+	
+	
+));
+
+asrt(Data::$info,'action3');
+
+Concordia::route(array(
+	'GET'=>array(
+		'/'=>'Controller1->action1',
+		'/page'=>'Controller2->action3',
+	),
+	'.*\.com'=>array(
+		'GET'=>array(
+			'/'=>'Controller2->action3'
+		)
+	),
+));
+
+asrt(Data::$info,'action3');
+
+
+fakeRequest('mywebsite.com','POST','/');
+
+Concordia::route(array(
+	'POST'=>array(
+		'/'=>'Controller1->action1',
+		'/page'=>'Controller2->action3',
+	),
+	'GET'=>array(
+		'/'=>'Controller1->action9',
+	),
+	'.*\.com'=>array(
+		'POST'=>array(
+			'/'=>'Controller2->action3'
+		)
+	),
+));
+
+
+asrt(Data::$info,'action3');
+
+
+fakeRequest('mywebsite.nl','POST','/');
+
+Concordia::route(array(
+	'POST'=>array(
+		'/'=>'Controller1->action1',
+		'/page'=>'Controller2->action3',
+	),
+	'GET'=>array(
+		'/'=>'Controller1->action9',
+	),
+	'.*\.com'=>array(
+		'POST'=>array(
+			'/'=>'Controller1->action1'
+		)
+	),
+	'.*\.nl'=>array(
+		'POST'=>array(
+			'/'=>'Controller2->action3'
+		)
+	),
+
+));
+
+
+asrt(Data::$info,'action3');
+

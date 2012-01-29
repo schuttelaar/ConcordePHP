@@ -76,14 +76,40 @@ class Concordia {
 		$requestMethod = $_SERVER['REQUEST_METHOD'];
 		
 		$routes = array();
+		$keys = array();
+		
+		//Scan array structure
+		foreach($map as $key=>$value) {
+			if (!is_array($value)) {
+				throw new Exception('Invalid Array structure, expected array but got: '.$value);
+			}
+			$firstElement = reset($value);
+			if (!is_array($firstElement)) {
+				$keys[] = $key;
+			}
+		}
+		
+		if (count($keys)) {
+			$defaultDomain = array();
+			foreach($keys as $key) {
+				$defaultDomain[$key] = $map[$key];
+				unset($map[$key]);
+			}
+		}
+		
+		//First add default domain routes, they can be overidden.
+		if (isset($defaultDomain) && isset($defaultDomain[$requestMethod])) {
+			$routes[] = $defaultDomain[$requestMethod];
+		}
+		
 		
 		//Find all domains that match
-		foreach($map as $key=>$value) {
+		foreach($map as $key=>$value) { 
 			$key = str_replace('/', '\/', $key);
-            $key = '^' . $key . '\/?$';
+            $key = '^' . $key . '\/?$'; 
 			if (preg_match('/'.$key.'/i',$domain)) {
 				if (isset($value[$requestMethod])) {
-					$routes[] = $value[$requestMethod];	
+					$routes[] = $value[$requestMethod];
 				}
 			}
 		}
@@ -92,7 +118,6 @@ class Concordia {
 		foreach($routes as $routeSet) {
 			$base = self::cascadeRoutes($base,$routeSet);
 		}
-		
 		
 		//Find a match
 		$flagFoundMatch = false;
@@ -107,6 +132,7 @@ class Concordia {
 		
 		//Found a match
 		if (!$flagFoundMatch) throw new Exception('No route has been found for URL: '.$url);
+		
 		
 		//Starts with a /, then redirect
 		if (strpos($route,'/')===0) {
