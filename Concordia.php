@@ -73,6 +73,14 @@ class Concordia {
 		//Obtain variables
 		$domain = $_SERVER['HTTP_HOST'];
 		$url = $_SERVER['REQUEST_URI'];
+
+		//keep query string (may start with ? or &)
+		$pos = strpos($url,'?');
+		if($pos === false) $pos = strpos($url,'&');
+		if ($pos !== false) { 
+			$url = substr($url,0,$pos);
+		}
+
 		$requestMethod = $_SERVER['REQUEST_METHOD'];
 		
 		$routes = array();
