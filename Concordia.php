@@ -10,8 +10,9 @@
  * ------------------------------------------------
  * 
  * Written by:
- *					G. de Mooij
- *					J. Schuttelaar 
+ *					G.J.G.T de Mooij
+ *					J.M. Schuttelaar 
+ * 					J. Hoogstrate
  * 
  * Licensed:		
  *					New BSD License
