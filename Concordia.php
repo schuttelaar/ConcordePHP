@@ -11,7 +11,7 @@
  * 
  * Written by:
  *					G.J.G.T de Mooij
- *					J.M. Schuttelaar 
+ *					J.J. Schuttelaar 
  * 					J. Hoogstrate
  * 
  * Licensed:		
