@@ -10,7 +10,7 @@
  *					New BSD License
  * 
  **/
-class ConcordePHP {
+class Concorde {
 
 	/**
 	* Factory closure; used to create instances
@@ -588,4 +588,4 @@ class CRouteNotFound extends CException {
 }
 
 //Alias for backward compat.
-class Concordia extends ConcordePHP {}
+class Concordia extends Concorde {}
