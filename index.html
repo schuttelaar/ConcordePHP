@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Concordephp by schuttelaar</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Concordephp</h1>
+        <h2>Router and Micro Framework for PHP</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/schuttelaar/ConcordePHP/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/schuttelaar/ConcordePHP/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/schuttelaar/ConcordePHP" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a name="concordephp" class="anchor" href="#concordephp"><span class="octicon octicon-link"></span></a>ConcordePHP</h1>
+
+<p>ConcordePHP is a lightweight router class for PHP that can be used as a micro framework as well.</p>
+
+<p>Usage:</p>
+
+<pre><code> Concordia::route(array(
+    '.*' =&gt; array(
+       'GET'=&gt;array(
+      '/page/(\w+)' =&gt; 'Pagecontroller-&gt;title',
+   ),
+   'POST'=&gt;array(
+      '/myform/(\d+)' =&gt; 'Test-&gt;myform',
+    )
+ ),
+ '(.*)\.com'=&gt;array(
+    'GET'=&gt;array(
+       '/page/(\w+)' =&gt; 'PagecontrollerCom-&gt;title'
+     ),
+ )      
+ ));
+</code></pre>
+
+<p>As you see, ConcordePHP supports multiple domains (first level of array) and request methods (second level).URL matches are passed to methods as arguments.</p>
+
+<p>Another example: </p>
+
+<pre><code> Concordia::route(array(
+         '.*' =&gt; array(
+                 'GET' =&gt; array(
+                         '/(\w+)/(\d+)' =&gt; 'Controller1-&gt;show'
+                 )
+         )
+ ));
+</code></pre>
+
+<p>Now when the user accesses the following url:</p>
+
+<pre><code> http://mywebsite.com/page/2
+</code></pre>
+
+<p>The function in Controller 1 will be called:</p>
+
+<pre><code> public function show( $module, $id ) {
+ ....
+ }
+</code></pre>
+
+<p>ConcordePHP also offers methods to easily retrieve request variables:</p>
+
+<pre><code> $router = ConcordePHP::instance();
+ $router-&gt;post('name', 'anonymous'); //returns $_POST['name'] or the default if not set
+ $router-&gt;get('search', '');
+ $router-&gt;session('UID', 0);
+</code></pre>
+
+<h2>
+<a name="request-tunneling" class="anchor" href="#request-tunneling"><span class="octicon octicon-link"></span></a>Request Tunneling</h2>
+
+<p>ConcordePHP offers a basic method to tunnel request methods not supported by browsers:</p>
+
+<pre><code>ConcordePHP::tunnel('PUT,DELETE','_method');
+</code></pre>
+
+<h2>
+<a name="request-simulation" class="anchor" href="#request-simulation"><span class="octicon octicon-link"></span></a>Request Simulation</h2>
+
+<p>To perform a request simulation:</p>
+
+<p>ConcordePHP::sim('POST:/page/1', $formData);</p>
+
+<h2>
+<a name="reverse-routes" class="anchor" href="#reverse-routes"><span class="octicon octicon-link"></span></a>Reverse Routes</h2>
+
+<p>Reverse URLs cannot be inferred from regular expressions in the route data so we simply add another section to the route map:</p>
+
+<pre><code> "~" =&gt; array(
+      'preview-page' =&gt; 'preview/%s'  
+ )
+</code></pre>
+
+<p>You can obtain the URL and fill in the parameter slot %s by
+invoking this method like:</p>
+
+<pre><code> ConcordePHP::getUrl('preview-page', array('homepage'));
+ //returns: /preview/homepage
+</code></pre>
+
+<h2>
+<a name="flash-message" class="anchor" href="#flash-message"><span class="octicon octicon-link"></span></a>Flash message</h2>
+
+<p>Flash message. A Flash message is a session variable (_flash) that gets set for one request and then dissapears. Optionally you can pass a redirect url.</p>
+
+<pre><code> ConcordePHP::flash('Account Created!', '/login');
+</code></pre>
+
+<p>this stores the message 'Account Created!' in the session and redirects to /login. when the flash method gets called again:</p>
+
+<pre><code> $message = ConcordePHP::flash();
+</code></pre>
+
+<p>$message will contain the string 'Account Created!' and the session variable will be unset to prevent the message from re-occurring.</p>
+
+<h2>
+<a name="redirect-and-404" class="anchor" href="#redirect-and-404"><span class="octicon octicon-link"></span></a>Redirect and 404</h2>
+
+<p>To redirect:</p>
+
+<pre><code> ConcordePHP::redirect($url);
+</code></pre>
+
+<p>In case no route can be found for an URL a CRouteNotFound exeption gets thrown and you can handle this exception the way you prefer.</p>
+
+<h2>
+<a name="other-functions" class="anchor" href="#other-functions"><span class="octicon octicon-link"></span></a>Other functions</h2>
+
+<p>Besides routing, ConcordePHP can be used as a tiny framework for your PHP application.
+Here is an overview of the additional functionalities.</p>
+
+<h3>
+<a name="translations" class="anchor" href="#translations"><span class="octicon octicon-link"></span></a>Translations</h3>
+
+<p>ConcordePHP supports basic translation functions:</p>
+
+<pre><code> ConcordePHP::translate();
+</code></pre>
+
+<p>Returns the text for a language key. For instance if your dictionary (see setDictionary) contains an entry like:</p>
+
+<pre><code> array( ..
+     'error.page-not-found' =&gt; 'Oops; page "%s" could not be found!'
+ ..)
+</code></pre>
+
+<p>You can obtain the proper language string like this:</p>
+
+<pre><code> ConcordePHP::translate('error.page-not-found',array('news'));
+</code></pre>
+
+<p>returns: 'Oops; page "news" could not be found!'.</p>
+
+<h3>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h3>
+
+<p>Load and access configuration variables (supports dot notation):</p>
+
+<pre><code> ConcordePHP::loadConf( $array );
+ ConcordePHP::conf('database.production.dbname', $default);
+</code></pre>
+
+<h3>
+<a name="extend" class="anchor" href="#extend"><span class="octicon octicon-link"></span></a>Extend</h3>
+
+<p>To extend ConcordePHP with more functions use:</p>
+
+<pre><code>ConcordePHP::service('greet', function(){ ... });
+</code></pre>
+
+<h3>
+<a name="proxy" class="anchor" href="#proxy"><span class="octicon octicon-link"></span></a>Proxy</h3>
+
+<p>If you are too lazy to type the word 'ConcordePHP' all the time, you can use the proxy:</p>
+
+<pre><code> $c = ConcordePHP::instance();
+</code></pre>
+
+<p>This might be a bit slower though.</p>
+
+<h3>
+<a name="factory" class="anchor" href="#factory"><span class="octicon octicon-link"></span></a>Factory</h3>
+
+<p>If your Controllers need to be configured before they can be used you can define a factory function to create your controllers when a route matches:</p>
+
+<pre><code> ConcordePHP::factory( function( $controllerClassName ) { ... } );
+</code></pre>
+
+<h3>
+<a name="views" class="anchor" href="#views"><span class="octicon octicon-link"></span></a>Views</h3>
+
+<p>ConcordePHP offers a very basic view system:</p>
+
+<pre><code> $view = new ConcordeView;
+ $view-&gt;title = 'Hi!';
+ echo $view-&gt;render('path/to/view.php');
+</code></pre>
+
+<p>In the view:</p>
+
+<pre><code> &lt;?php echo $this-&gt;escape($this-&gt;title); ?&gt;
+</code></pre>
+
+<p>Here, the view properties are just public properties and the view is a normal PHP file.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
