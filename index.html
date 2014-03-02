@@ -35,7 +35,7 @@
 
 <p>Usage:</p>
 
-<pre><code> Concordia::route(array(
+<pre><code> Concorde::route(array(
     '.*' =&gt; array(
        'GET'=&gt;array(
       '/page/(\w+)' =&gt; 'Pagecontroller-&gt;title',
@@ -56,7 +56,7 @@
 
 <p>Another example: </p>
 
-<pre><code> Concordia::route(array(
+<pre><code> Concorde::route(array(
          '.*' =&gt; array(
                  'GET' =&gt; array(
                          '/(\w+)/(\d+)' =&gt; 'Controller1-&gt;show'
@@ -79,7 +79,7 @@
 
 <p>ConcordePHP also offers methods to easily retrieve request variables:</p>
 
-<pre><code> $router = ConcordePHP::instance();
+<pre><code> $router = Concorde::instance();
  $router-&gt;post('name', 'anonymous'); //returns $_POST['name'] or the default if not set
  $router-&gt;get('search', '');
  $router-&gt;session('UID', 0);
@@ -90,7 +90,7 @@
 
 <p>ConcordePHP offers a basic method to tunnel request methods not supported by browsers:</p>
 
-<pre><code>ConcordePHP::tunnel('PUT,DELETE','_method');
+<pre><code>Concorde::tunnel('PUT,DELETE','_method');
 </code></pre>
 
 <h2>
@@ -98,7 +98,7 @@
 
 <p>To perform a request simulation:</p>
 
-<pre><code>ConcordePHP::sim('POST:/page/1', $formData);
+<pre><code>Concorde::sim('POST:/page/1', $formData);
 </code></pre>
 
 <h2>
@@ -114,7 +114,7 @@
 <p>You can obtain the URL and fill in the parameter slot %s by
 invoking this method like:</p>
 
-<pre><code> ConcordePHP::getUrl('preview-page', array('homepage'));
+<pre><code> Concorde::getUrl('preview-page', array('homepage'));
  //returns: /preview/homepage
 </code></pre>
 
@@ -123,12 +123,12 @@ invoking this method like:</p>
 
 <p>Flash message. A Flash message is a session variable (_flash) that gets set for one request and then dissapears. Optionally you can pass a redirect url.</p>
 
-<pre><code> ConcordePHP::flash('Account Created!', '/login');
+<pre><code> Concorde::flash('Account Created!', '/login');
 </code></pre>
 
 <p>this stores the message 'Account Created!' in the session and redirects to /login. when the flash method gets called again:</p>
 
-<pre><code> $message = ConcordePHP::flash();
+<pre><code> $message = Concorde::flash();
 </code></pre>
 
 <p>$message will contain the string 'Account Created!' and the session variable will be unset to prevent the message from re-occurring.</p>
@@ -138,7 +138,7 @@ invoking this method like:</p>
 
 <p>To redirect:</p>
 
-<pre><code> ConcordePHP::redirect($url);
+<pre><code> Concorde::redirect($url);
 </code></pre>
 
 <p>In case no route can be found for an URL a CRouteNotFound exeption gets thrown and you can handle this exception the way you prefer.</p>
@@ -154,7 +154,7 @@ Here is an overview of the additional functionalities.</p>
 
 <p>ConcordePHP supports basic translation functions:</p>
 
-<pre><code> ConcordePHP::translate();
+<pre><code> Concorde::translate();
 </code></pre>
 
 <p>Returns the text for a language key. For instance if your dictionary (see setDictionary) contains an entry like:</p>
@@ -166,7 +166,7 @@ Here is an overview of the additional functionalities.</p>
 
 <p>You can obtain the proper language string like this:</p>
 
-<pre><code> ConcordePHP::translate('error.page-not-found',array('news'));
+<pre><code> Concorde::translate('error.page-not-found',array('news'));
 </code></pre>
 
 <p>returns: 'Oops; page "news" could not be found!'.</p>
@@ -176,8 +176,8 @@ Here is an overview of the additional functionalities.</p>
 
 <p>Load and access configuration variables (supports dot notation):</p>
 
-<pre><code> ConcordePHP::loadConf( $array );
- ConcordePHP::conf('database.production.dbname', $default);
+<pre><code> Concorde::loadConf( $array );
+ Concorde::conf('database.production.dbname', $default);
 </code></pre>
 
 <h3>
@@ -185,7 +185,7 @@ Here is an overview of the additional functionalities.</p>
 
 <p>To extend ConcordePHP with more functions use:</p>
 
-<pre><code>ConcordePHP::service('greet', function(){ ... });
+<pre><code>Concorde::service('greet', function(){ ... });
 </code></pre>
 
 <h3>
@@ -193,7 +193,7 @@ Here is an overview of the additional functionalities.</p>
 
 <p>If you are too lazy to type the word 'ConcordePHP' all the time, you can use the proxy:</p>
 
-<pre><code> $c = ConcordePHP::instance();
+<pre><code> $c = Concorde::instance();
 </code></pre>
 
 <p>This might be a bit slower though.</p>
@@ -203,7 +203,7 @@ Here is an overview of the additional functionalities.</p>
 
 <p>If your Controllers need to be configured before they can be used you can define a factory function to create your controllers when a route matches:</p>
 
-<pre><code> ConcordePHP::factory( function( $controllerClassName ) { ... } );
+<pre><code> Concorde::factory( function( $controllerClassName ) { ... } );
 </code></pre>
 
 <h3>
