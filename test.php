@@ -12,7 +12,7 @@ function asrt($a,$b) {
 }
 echo "\nTesting Concordia Router and Controller system for PHP....";
 echo "\n";
-require('Concordia.php');
+require('ConcordePHP.php');
 
 asrt(class_exists('Concordia'),true);
 
@@ -24,8 +24,8 @@ class Controller1 extends Concordia {
 	public function action1() {
 		Data::$info = 'action1';
 	}
-	public function action2() {
-		Data::$info = 'param='.$this->getUrlParam(1);
+	public function action2($a = '') {
+		Data::$info = 'param='.$a;
 	}
 }
 
@@ -34,7 +34,7 @@ class Controller2 extends Concordia {
 		Data::$info = 'action3';
 	}
 	public function action4() {
-		Data::$info = 'param='.$this->getParam('test','nothing');
+		Data::$info = 'param='.$this->post('test','nothing');
 	}
 }
 
@@ -119,7 +119,8 @@ catch(Exception $e) {
 	$m = $e->getMessage();
 }
 
-asrt($m,'No route has been found for URL: /other/42');
+
+asrt($m,'No route has been found for URL: /other/42.');
 
 
 
@@ -162,7 +163,8 @@ Concordia::route(array(
 		)
 	)
 ));
-asrt(Data::$info,'param=');
+
+asrt(Data::$info,'param=/post/');
 
 $_POST = array('test'=>'the_post');
 fakeRequest('mywebsite.com','POST','/post/something/'); 
@@ -257,9 +259,7 @@ Concordia::route(array(
 }catch(Exception $e){
 	$m = $e->getMessage();	
 }
-
-asrt($m,'Unable to create instance of class: Bug');
-
+asrt(trim($m),'Unable to create instance of class: Bug:BUG');
 
 //can we scan array structure; i.e. see POST and GET as *. => POST so we can
 //have default domain without defining it beforehand?
@@ -271,7 +271,6 @@ Concordia::route(array(
 		'/'=>'Controller1->action1'
 	)
 ));
-
 asrt(Data::$info,'action1');
 
 
@@ -281,7 +280,6 @@ Concordia::route(array(
 		'/page'=>'Controller2->action3',
 	)
 ));
-
 asrt(Data::$info,'action1');
 
 Concordia::route(array(
