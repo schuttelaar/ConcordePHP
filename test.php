@@ -27,6 +27,9 @@ class Controller1 extends Concordia {
 	public function action2($a = '') {
 		Data::$info = 'param='.$a;
 	}
+	public function show($arg1, $arg2) {
+		Data::$info = $arg1.','.$arg2;
+	}
 }
 
 class Controller2 extends Concordia {
@@ -50,9 +53,21 @@ function fakeRequest($domain,$method,$url) {
 	$_SERVER['REQUEST_METHOD']=$method;
 }
 
+fakeRequest('mywebsite.com', 'GET', '/page/2');
+
+Concordia::route(array(
+	'.*' => array(
+		'GET' => array(
+			'/(\w+)/(\d+)' => 'Controller1->show'
+		)
+	)
+));
+
+
+asrt(Data::$info,'page,2');
+
+
 fakeRequest('mywebsite.com','GET','/');
-
-
 
 
 Concordia::route(array(
