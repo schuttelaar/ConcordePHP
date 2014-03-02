@@ -366,3 +366,9 @@ Concordia::route(array(
 
 asrt(Data::$info,'action3');
 
+$view = new ConcordeView;
+$view->greet = '"<Hello\'';
+$test = $view->render('view.php');
+asrt(trim($test), '&quot;&lt;Hello\' World');
+
+
