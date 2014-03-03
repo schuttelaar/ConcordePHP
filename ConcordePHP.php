@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Concorde PHP 1.5
+ * ConcordePHP 1.5 | No-nonsense PHP Controller and Micro Framework
  * 
  * Written by:
  *					G. de Mooij
@@ -551,7 +552,7 @@ class ConcordeView {
 	* @return string
 	*/
 	public function escape($str) {
-		$str = htmlspecialchars( $str, ENT_COMPAT, 'UTF-8' );
+		$str = htmlspecialchars( $str, ENT_QUOTES, 'UTF-8' );
 		//for old MSIE backtick XSS hack
 		$str = str_replace( '`', '&#96;', $str );
 		return $str;	
@@ -568,24 +569,19 @@ class ConcordeView {
 		$str = file_get_contents($file);
 		ob_start();
 		require($file);
-        	$output = ob_get_clean();
-        	return $output;
+      $output = ob_get_clean();
+      return $output;
 	}
-
-
 }
 
 /**
 * General ConcordePHP exception.
 */
-class CException extends Exception {
-}
-
+class CException extends Exception {}
 /**
 * Route not found exception.
 */
-class CRouteNotFound extends CException {
-}
+class CRouteNotFound extends CException {}
 
 //Alias for backward compat.
 class Concordia extends Concorde {}
