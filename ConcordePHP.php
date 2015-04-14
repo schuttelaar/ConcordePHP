@@ -4,11 +4,11 @@
  * ConcordePHP 1.5 | No-nonsense PHP Controller and Micro Framework
  * 
  * Written by:
- *					G. de Mooij
- *					J. Schuttelaar 
+ *	G. de Mooij
+ *	J. Schuttelaar 
  * 
  * Licensed:		
- *					New BSD License
+ *	New BSD License
  * 
  **/
 class Concorde {
