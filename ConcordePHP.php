@@ -566,11 +566,10 @@ class ConcordeView {
 	* @return string
 	*/
 	public function render($file) {
-		$str = file_get_contents($file);
 		ob_start();
 		require($file);
-      $output = ob_get_clean();
-      return $output;
+      		$output = ob_get_clean();
+      		return $output;
 	}
 }
 
