@@ -544,6 +544,8 @@ class ConcordeProxy {
 */
 class ConcordeView {
 
+	protected $layout = null;
+
 	/**
 	* Escape strings.
 	*
@@ -559,6 +561,16 @@ class ConcordeView {
 	}
 
 	/**
+	 * Set layout template.
+	 * Render method will place content in $content variable of template.
+	 *
+	 * @param $file Path to layout template file.
+	*/
+	public function setLayout($file) {
+		$this->layout = $file;
+	}
+
+	/**
 	* Returns the rendered template.
 	*
 	* @param string $file filename
@@ -568,8 +580,15 @@ class ConcordeView {
 	public function render($file) {
 		ob_start();
 		require($file);
-      		$output = ob_get_clean();
-      		return $output;
+		
+		if(isset($this->layout)) {
+			$content = ob_get_contents();
+			ob_end_clean();
+			ob_start();
+			require($this->layout);
+		}
+		
+		return ob_get_clean();
 	}
 }
 
